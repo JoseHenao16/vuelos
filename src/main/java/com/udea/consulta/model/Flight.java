@@ -17,16 +17,47 @@ public class Flight {
     private String destination;
     private LocalDate date;
     private double price;
+    private String baggageType;
+    private String classType;
+    private Integer maxNumberPassengers;
+
 
     public Flight() {
     }
 
-    public Flight(Long id, String origin, String destination, LocalDate date, double price) {
+    public Flight(Long id, String origin, String destination, LocalDate date, double price, String baggageType, String classType, Integer maxNumberPassengers) {
         this.id = id;
         this.origin = origin;
         this.destination = destination;
         this.date = date;
         this.price = price;
+        this.baggageType = baggageType;
+        this.classType = classType;
+        this.maxNumberPassengers = maxNumberPassengers;
+    }
+
+    public String getBaggageType() {
+        return baggageType;
+    }
+
+    public void setBaggageType(String baggageType) {
+        this.baggageType = baggageType;
+    }
+
+    public String getClassType() {
+        return classType;
+    }
+
+    public void setClassType(String classType) {
+        this.classType = classType;
+    }
+
+    public Integer getMaxNumberPassengers() {
+        return maxNumberPassengers;
+    }
+
+    public void setMaxNumberPassengers(Integer maxNumberPassengers) {
+        this.maxNumberPassengers = maxNumberPassengers;
     }
 
     public Long getId() {

@@ -2,45 +2,28 @@ package com.udea.consulta.repository;
 
 import com.udea.consulta.model.Flight;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public interface FlightRepository extends JpaRepository<Flight, Long> {
-    // Metodo para buscar vuelos entre dos fechas, con origen y destino espcíficos
 
-    List<Flight>
-    findByDateBetweenAndOriginContainingIgnoreCaseAndDestinationContainingIgnoreCase
-            (
-                    LocalDate startDate, LocalDate endDate, String origin, String destination
-            );
-
-    // Metodo para buscar vuelos entre dos fechas, con origen específico y precio máximo
-    List<Flight>
-    findByDateBetweenAndOriginContainingIgnoreCaseAndPriceLessThanEqual
-    (
-            LocalDate startDate, LocalDate endDate, String origin, double maxPrice
-    );
-
-    // Metodo para buscar vuelos entre dos fechas, con destino específico y precio máximo
-    List<Flight>
-    findByDateBetweenAndDestinationContainingIgnoreCaseAndPriceLessThanEqual
-    (
-            LocalDate startDate, LocalDate endDate, String destination, double maxPrice
-    );
-
-    // Otros métodos necesarios para soportar las combinaciones de filtros
-    List<Flight> findByDateBetween(LocalDate startDate, LocalDate endDate);
-
-    List<Flight> findByDateBetweenAndOriginContainingIgnoreCase(LocalDate startDate, LocalDate endDate, String origin);
-
-    List<Flight> findByDateBetweenAndDestinationContainingIgnoreCase(LocalDate startDate, LocalDate endDate, String destination);
-
-    List<Flight> findByDateBetweenAndPriceLessThanEqual(LocalDate startDate, LocalDate endDate, double maxPrice);
-
-    List<Flight>
-    findByDateBetweenAndOriginContainingIgnoreCaseAndDestinationContainingIgnoreCaseAndPriceLessThanEqual
-            (
-                    LocalDate startDate, LocalDate endDate, String origin, String destination, double maxPrice
-            );
+    @Query("SELECT f FROM Flight f WHERE (:startDate IS NULL OR :endDate IS NULL OR (f.date <= :endDate AND f.date >= :startDate)) " +
+            "AND (:origin IS NULL OR f.origin = :origin) " +
+            "AND (:price IS NULL OR f.price <= :price)" +
+            "AND (:destination IS NULL OR f.destination = :destination) " +
+            "AND (:baggageType IS NULL OR f.baggageType = :baggageType) " +
+            "AND (:classType IS NULL OR f.classType = :classType) " +
+            "AND (:maxNumberPassengers IS NULL OR f.maxNumberPassengers <= :maxNumberPassengers)")
+    List<Flight> findFlightsByCriteria(
+            @Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate,
+            @Param("origin") String origin,
+            @Param("price") Double price,
+            @Param("destination") String destination,
+            @Param("baggageType") String baggageType,
+            @Param("classType") String classType,
+            @Param("maxNumberPassengers") Integer maxNumberPassengers);
 }

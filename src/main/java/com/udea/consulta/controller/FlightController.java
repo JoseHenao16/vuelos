@@ -12,25 +12,20 @@ import java.util.List;
 @RequestMapping("/api/flights")
 @CrossOrigin(origins = "http://localhost:3000")
 public class FlightController {
+
     @Autowired
     private FlightService flightService;
 
-    @GetMapping("search")
-    public List<Flight> searchFlight
-            (
-                    @RequestParam("startDate") String startDate,
-                    @RequestParam("endDate") String endDate,
-                    @RequestParam(value = "origin", required = false) String origin,
-                    @RequestParam(value = "destination", required = false) String destination,
-                    @RequestParam(value = "maxPrice", required = false) Double maxPrice
-            ) {
-        return flightService.findFlights
-                (
-                        LocalDate.parse(startDate),
-                        LocalDate.parse(endDate),
-                        origin,
-                        destination,
-                        maxPrice
-                );
+    @GetMapping("/search")
+    public List<Flight> getFlights(
+            @RequestParam(required = false) LocalDate startDate,
+            @RequestParam(required = false) LocalDate endDate,
+            @RequestParam(required = false) String origin,
+            @RequestParam(required = false) Double price,
+            @RequestParam(required = false) String destination,
+            @RequestParam(required = false) String baggageType,
+            @RequestParam(required = false) String classType,
+            @RequestParam(required = false) Integer maxNumberPassengers) {
+        return flightService.searchFlights(startDate, endDate, origin, price,destination, baggageType, classType, maxNumberPassengers);
     }
 }
